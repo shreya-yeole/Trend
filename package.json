@@ -1,0 +1,15 @@
+{
+  "name": "trendify",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 5173",
+    "start": "serve -s dist -l 5000"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "serve": "^14.0.1"
+  }
+}
