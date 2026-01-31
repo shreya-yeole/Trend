@@ -22,8 +22,8 @@ pipeline {
                                                  usernameVariable: "dockerHubUser",
                                                  passwordVariable: "dockerHubPass")]) {	
 					sh 'echo $dockerHubPass | docker login -u $dockerHubUser --password-stdin'
-					sh "docker image tag tredstore:latest ${env.dockerHubUser}/tredstore:latest"
-					sh "docker push ${env.dockerHubUser}/tredstore:latest"
+					sh "docker image tag trend-store-app:latest ${env.dockerHubUser}/trend-store-app:latest"
+					sh "docker push ${env.dockerHubUser}/trend-store-app:latest"
 					echo "docker image pushed successfully"
                 }
             }
