@@ -1,13 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-				echo "cloning the repository"
-                git branch: 'main', url: 'https://github.com/shreya-yeole/Trend.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 echo "Building the image"
