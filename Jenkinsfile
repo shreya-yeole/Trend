@@ -35,10 +35,11 @@ pipeline {
 					withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '031332257575']]) {
 					sh "aws eks update-kubeconfig --region us-east-1 --name sky-cluster"
 					sh 'kubectl apply -f deployment.yaml'
-                }
-            }
-		}
-    }
+                	}
+            	}
+			}
+    	}
+	}	
     post {
         success {
             echo "✅ Build, push, and deploy completed successfully!"
