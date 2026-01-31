@@ -1,23 +1,30 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+		stage("Checkout") {
+            steps {
+				echo "cloning the repository"
+                git url: "https://github.com/shreya-yeole/Trend.git",branch: "main"
+            }
+        }
+        stage("Build") {
             steps {
                 echo "Building the image"
-                sh 'docker build -t trend-store-app ./dist'
+                sh "docker build -t trend-store-app ./dist"
                 
             }
         }
 
-        stage('Push to docker hub') {
+        stage("Push to docker hub") {
             steps {
 				echo "pushing to dockerhub"
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
-                                                 usernameVariable: 'DOCKER_USER}//tredstore',
-                                                 passwordVariable: 'DOCKER_PASS')]) {						 
-                    sh "docker login -u ${env.DOCKER_USER} -p ${env.DOCKER_PASS}"
-					sh "docker push ${env.DOCKER_USER}/tredstore:latest"
+                withCredentials([usernamePassword(credentialsId: "dockerhubCreds",
+                                                 usernameVariable: "dockerHubUser",
+                                                 passwordVariable: "dockerHubPass")]) {	
+					sh 'echo $dockerHubPass | docker login -u $dockerHubUser --password-stdin'
+					sh "docker push ${env.dockerHubUser}/tredstore:latest"
 					echo "docker image pushed successfully"
+                }
                 }
             }
         }
