@@ -25,10 +25,9 @@ pipeline {
 					sh "docker push ${env.dockerHubUser}/tredstore:latest"
 					echo "docker image pushed successfully"
                 }
-                }
             }
         }
-
+    }
     post {
         success {
             echo "✅ Build, push, and deploy completed successfully!"
@@ -38,4 +37,3 @@ pipeline {
         }
     }
 }
-
