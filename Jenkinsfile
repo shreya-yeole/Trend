@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building the image"
-                sh 'docker build -t trend-store-app .'
+                sh 'docker build -t trend-store-app ./dist'
                 
             }
         }
