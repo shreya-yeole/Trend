@@ -17,7 +17,7 @@ resource "aws_vpc" "main" {
   enable_dns_support = true
   enable_dns_hostnames = true
   tags = {
-    Name = "jenkins-vpc"
+    Name = "shreya-vpc"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "jenkins-igw"
+    Name = "shreya-igw"
   }
 }
 
@@ -36,7 +36,7 @@ resource "aws_subnet" "public" {
   availability_zone = "us-east-1a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "jenkins-public-subnet"
+    Name = "shreya-public-subnet"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
-    Name = "jenkins-public-rt"
+    Name = "shreya-public-rt"
   }
 }
 
@@ -84,13 +84,13 @@ resource "aws_security_group" "jenkins_sg" {
   }
 
   tags = {
-    Name = "jenkins-sg"
+    Name = "shreya-jenkins-sg"
   }
 }
 
 # IAM Role for EC2
 resource "aws_iam_role" "jenkins_role" {
-  name = "jenkins-ec2-role"
+  name = "shreya-ec2-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -141,7 +141,7 @@ resource "aws_iam_instance_profile" "jenkins_profile" {
 
 # EC2 Instance with Jenkins
 resource "aws_instance" "jenkins" {
-  ami           = "ami-0c7217cdde317cfec"  # Amazon Linux 2, update as needed
+  ami           = "ami-0b6c6ebed2801a5cb"  # ubuntu
   instance_type = "t3.micro"
   subnet_id     = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
@@ -149,14 +149,15 @@ resource "aws_instance" "jenkins" {
   key_name      = "myKey" 
 
   user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y java-1.8.0-openjdk wget
-              wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
-              rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-              yum install -y jenkins
+	      #!/bin/bash
+              apt update -y
+              apt install -y openjdk-8-jdk wget
+              wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+              echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+              apt update
+              apt install -y jenkins
               systemctl start jenkins
-              systemctl enable jenkins
+              systemctl enable jenkins	
               EOF
 
   tags = {
