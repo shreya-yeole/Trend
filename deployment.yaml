@@ -1,21 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trendstore
+  name: trendstore-deployment
   labels:
-    app: trend
+    app: trendstore
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: trend
+      app: trendstore
   template:
     metadata:
       labels:
-        app: trend
+        app: trendstore
     spec:
       containers:
       - name: trendstore
-        image: trendstore:latest
+        image: trend-store-app:latest
         ports:
         - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trendstore-service
+  labels:
+    app: trendstore
+spec:
+  selector:
+    app: trendstore
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: LoadBalancer
