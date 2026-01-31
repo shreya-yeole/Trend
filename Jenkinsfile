@@ -28,6 +28,16 @@ pipeline {
                 }
             }
         }
+		stage('K8S Deploy') {
+			steps{
+				script {
+					echo "deploying into kubernetes"
+					withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '031332257575']]) {
+					sh "aws eks update-kubeconfig --region us-east-1 --name sky-cluster"
+					sh 'kubectl apply -f deployment.yaml'
+                }
+            }
+		}
     }
     post {
         success {
