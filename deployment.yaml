@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: trendstore
-        image: trend-store-app:latest
+        image: 569730/trend-store-app:latest
         ports:
         - containerPort: 80
 ---
